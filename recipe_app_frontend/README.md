@@ -1,65 +1,70 @@
-# Qwik City App ⚡️
+# Recipe Explorer Frontend (Qwik)
 
-- [Qwik Docs](https://qwik.dev/)
-- [Discord](https://qwik.dev/chat)
-- [Qwik GitHub](https://github.com/QwikDev/qwik)
-- [@QwikDev](https://twitter.com/QwikDev)
-- [Vite](https://vitejs.dev/)
+Modern Qwik app for browsing, searching, adding, editing, and viewing recipes. Styled with the Ocean Professional theme (blue primary and amber accents), responsive and accessible.
 
----
+## Features
+- Routing: `/` (list/search), `/recipe/:id` (details), `/recipe/new`, `/recipe/:id/edit`
+- Components: Navbar, Button, Card, Modal, and a RecipeForm
+- Search and filters (cuisine, type) with basic pagination
+- Data service uses `VITE_API_BASE` for REST (`GET /recipes`, `GET /recipes/:id`, `POST /recipes`, `PUT /recipes/:id`)
+- If `VITE_API_BASE` is empty, uses an in-memory mock service with the same interface
+- Loading, error, and empty states
+- Ocean Professional theme via CSS variables
+
+## Getting started
+
+1) Install deps:
+```bash
+npm install
+```
+
+2) Configure environment:
+- Copy `.env.example` to `.env` and set values as needed.
+- If you have a backend, set `VITE_API_BASE` to its base URL.
+- If `VITE_API_BASE` is empty, the app will use local mock data automatically (especially in development).
+
+3) Run in dev (SSR):
+```bash
+npm start
+```
+App runs at http://localhost:3000
+
+4) Preview production:
+```bash
+npm run preview
+```
+
+5) Build:
+```bash
+npm run build
+```
+
+## Environment variables
+- `VITE_API_BASE`: Base URL for backend API (e.g., http://localhost:8080). If empty, mock is used.
+- `VITE_BACKEND_URL`: Alternative key that may be used by your environment. If set, used as a fallback to `VITE_API_BASE`.
+- `VITE_NODE_ENV`: When `development` and `VITE_API_BASE` is empty, mock is used.
+
+See `.env.example` for additional keys accepted by the environment.
 
 ## Project Structure
-
-This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/). QwikCity is just an extra set of tools on top of Qwik to make it easier to build a full site, including directory-based routing, layouts, and more.
-
-Inside your project, you'll see the following directory structure:
-
 ```
-├── public/
-│   └── ...
-└── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
-```
-
-- `src/routes`: Provides the directory-based routing, which can include a hierarchy of `layout.tsx` layout files, and an `index.tsx` file as the page. Additionally, `index.ts` files are endpoints. Please see the [routing docs](https://qwik.dev/qwikcity/routing/overview/) for more info.
-
-- `src/components`: Recommended directory for components.
-
-- `public`: Any static assets, like images, can be placed in the public directory. Please see the [Vite public directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
-
-## Add Integrations and deployment
-
-Use the `npm run qwik add` command to add additional integrations. Some examples of integrations includes: Cloudflare, Netlify or Express Server, and the [Static Site Generator (SSG)](https://qwik.dev/qwikcity/guides/static-site-generation/).
-
-```shell
-npm run qwik add # or `yarn qwik add`
+src/
+  components/
+    recipes/RecipeForm.tsx
+    ui/{Navbar,Button,Card,Modal}.tsx
+  routes/
+    index.tsx                 # Home list/search
+    recipe/[id]/index.tsx     # Details
+    recipe/new/index.tsx      # Add
+    recipe/[id]/edit/index.tsx# Edit
+  services/
+    {api,types,mockData}.ts
 ```
 
-## Development
+## Styling
+- Theme tokens are defined in `src/global.css` under `:root` using CSS variables.
+- Components/pages use a clean, rounded, and shadowed aesthetic with subtle gradients.
 
-Development mode uses [Vite's development server](https://vitejs.dev/). The `dev` command will server-side render (SSR) the output during development.
-
-```shell
-npm start # or `yarn start`
-```
-
-> Note: during dev mode, Vite may request a significant number of `.js` files. This does not represent a Qwik production build.
-
-## Preview
-
-The preview command will create a production build of the client modules, a production build of `src/entry.preview.tsx`, and run a local server. The preview server is only for convenience to preview a production build locally and should not be used as a production server.
-
-```shell
-npm run preview # or `yarn preview`
-```
-
-## Production
-
-The production build will generate client and server modules by running both client and server build commands. The build command will use Typescript to run a type check on the source code.
-
-```shell
-npm run build # or `yarn build`
-```
+## Notes
+- No endpoints are hardcoded; base URL comes from `import.meta.env`.
+- The mock layer simulates latency and supports search/filter/pagination logic.
